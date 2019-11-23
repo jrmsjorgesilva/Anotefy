@@ -1,11 +1,5 @@
 const fs = require("fs");
 
-//RETORNA AS ANOTAÇÕES
-
-const getNotes = () => {
-  return "your notes...";
-};
-
 //ADICIONA ANOTAÇÕES
 
 const addNote = (title, description) => {
@@ -32,7 +26,43 @@ const addNote = (title, description) => {
 //REMOVE AS ANOTAÇÕES
 
 const removeNote = title => {
-  console.log("removendo anotação ", title);
+  const notes = loadNotes();
+
+  const remove = notes.filter(note => {
+    return note.title !== title;
+  });
+
+  if (remove.length < notes.length) {
+    saveNotes(remove);
+    console.log("removendo anotação ", title);
+  } else {
+    console.log("Não existe nenhuma anotação com o titulo ", title);
+  }
+};
+
+//EXIBE AS ANOTAÇÕES POR TITULO
+
+const listNotes = () => {
+  const notes = loadNotes();
+
+  notes.forEach(note => {
+    console.log(note.title);
+  });
+};
+
+//REALIZA LEITURA DAS DESCRIÇÕES DAS ANOTAÇÕES POR TITULO
+const readNote = title => {
+  const notes = loadNotes();
+
+  const noteToRead = notes.find(note => {
+    return note.title === title;
+  });
+
+  if (noteToRead) {
+    console.log(title, " : ", noteToRead.description);
+  } else {
+    console.log("Não há nenhuma anotação com o titulo ", title);
+  }
 };
 
 //GRAVA AS ANOTAÇÕES NA PASTA RAIZ
@@ -54,7 +84,8 @@ const loadNotes = () => {
 
 //EXPORTA AS FUNÇÕES PARA APP.JS
 module.exports = {
-  getNotes: getNotes,
   addNote: addNote,
-  removeNote: removeNote
+  removeNote: removeNote,
+  listNotes: listNotes,
+  readNote: readNote
 };
